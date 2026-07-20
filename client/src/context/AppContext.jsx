@@ -5,12 +5,15 @@ import { dummyCourses } from '../assets/assets';
 import { useNavigate } from 'react-router-dom';
 import humanizeDuration from 'humanize-duration';
 
+
 export const AppContext = createContext();
 
 export const AppContextProvider = (props) => {
   const currency = import.meta.env.VITE_CURRENCY || '$'; // Default to '$'
 
   const navigate = useNavigate();
+
+ 
 
   const [allCourses, setallCourses] = useState([]);
   const [isEducator, setIsEducator] = useState(true);
@@ -75,6 +78,7 @@ export const AppContextProvider = (props) => {
     fetchUserEnrolledCourses()
   }, []);
 
+  
   const value = {
     currency,
     allCourses,
