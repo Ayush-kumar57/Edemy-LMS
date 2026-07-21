@@ -4,6 +4,7 @@ import 'dotenv/config.js';
 import connectDB from './configs/mongodb.js';
 import { clearkWebhooks } from './controllers/webhooks.js';
 import { clerkMiddleware } from '@clerk/express';
+import educatorRouter from './routes/educatorRoutes.js';
 
 // initialize express
 const app = express();
