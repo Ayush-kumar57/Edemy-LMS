@@ -84,7 +84,7 @@ export const addCourse = async (req, res) => {
       message: 'Course Created Successfully',
     });
   } catch (error) {
-    console.log('\n========== CONTROLLER ERROR ==========');
+  
     console.dir(error, { depth: null });
 
     return res.status(500).json({
