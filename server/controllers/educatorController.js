@@ -1,6 +1,7 @@
 import { clerkClient, getAuth } from '@clerk/express';
 import { v2 as cloudinary } from 'cloudinary';
 import Course from '../models/Course.js';
+import fs from 'fs';
 
 // Update role to educator
 export const updateRoleToEducator = async (req, res) => {
@@ -29,12 +30,11 @@ export const updateRoleToEducator = async (req, res) => {
 };
 
 // Add New Course
+
 export const addCourse = async (req, res) => {
   try {
     const { courseData } = req.body;
-
     const imageFile = req.file;
-
     const { userId: educatorId } = getAuth(req);
 
     if (!imageFile) {
@@ -45,35 +45,51 @@ export const addCourse = async (req, res) => {
     }
 
     const parsedCourseData = JSON.parse(courseData);
-
     parsedCourseData.educator = educatorId;
 
     const newCourse = await Course.create(parsedCourseData);
 
-    // const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
-    //   resource_type: 'auto',
-    //   invalidate: true,
-    // });
+    
 
-    console.log('here testing code is working');
+    try {
+      const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
+        resource_type: 'image',
+      });
 
-    // simple for testing.
-    //const imageUpload = await cloudinary.uploader.upload(imageFile.path);
+      newCourse.courseThumbnail = imageUpload.secure_url;
+    } catch (error) {
+      if (error.response) {
+        console.log('\nResponse:');
+        console.dir(error.response, { depth: null });
+      }
 
-    console.log('After that code is also working');
+      if (error.request) {
+        console.log('\nRequest:');
+        console.dir(error.request, { depth: null });
+      }
 
-    // newCourse.courseThumbnail = imageUpload.secure_url;
+      if (error.error) {
+        console.log('\nCloudinary Error:');
+        console.dir(error.error, { depth: null });
+      }
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
     await newCourse.save();
-
-    res
-      .status(201)
-      .json({ success: true, message: 'Course Created Successfully' });
+    return res.status(201).json({
+      success: true,
+      message: 'Course Created Successfully',
+    });
   } catch (error) {
-    console.error('FULL ERROR:', error);
+    console.log('\n========== CONTROLLER ERROR ==========');
+    console.dir(error, { depth: null });
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: 'Error in addCourse controller',
+      message: error.message,
     });
   }
 };

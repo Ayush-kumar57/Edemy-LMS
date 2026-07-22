@@ -25,6 +25,7 @@ app.get('/', (req, res) => res.send('Api working'));
 app.post('/clerk', express.json(), clearkWebhooks);
 app.use('/api/educator', express.json(), educatorRouter);
 
+
 // PORT
 const PORT = process.env.PORT || 5000;
 
