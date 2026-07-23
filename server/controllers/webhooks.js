@@ -83,8 +83,11 @@ export const stripeWebhooks = async (req, res) => {
         payment_intent: paymentIntentId,
       });
 
-      const { purchaseId } = session.data[0].metadata;
+      // const { purchaseId } = session.data[0].metadata;
 
+      // const purchaseData = await Purchase.findById(purchaseId);
+
+      // const userData = await User.findById(purchaseData.userId);
       const purchaseData = await Purchase.findById(purchaseId);
 
       const userData = await User.findById(purchaseData.userId);
@@ -93,11 +96,23 @@ export const stripeWebhooks = async (req, res) => {
         purchaseData.courseId.toString(),
       );
 
-      courseData.enrolledStudents.push(userData);
+      // ✅ FIXED: Poore userData ke bajaye sirf userId (String) push karein
+      courseData.enrolledStudents.push(purchaseData.userId);
       await courseData.save();
 
+      // ✅ FIXED: Poore courseData ke bajaye sirf uski _id push karein
       userData.enrolledCourses.push(courseData._id);
       await userData.save();
+
+      // const courseData = await Course.findById(
+      //   purchaseData.courseId.toString(),
+      // );
+
+      // courseData.enrolledStudents.push(userData);
+      // await courseData.save();
+
+      // userData.enrolledCourses.push(courseData._id);
+      // await userData.save();
 
       purchaseData.status = 'completed';
       await purchaseData.save();
