@@ -8,7 +8,7 @@ import Stripe from 'stripe';
 export const getUserData = async (req, res) => {
   try {
     const userId = getAuth(req).userId;
-  
+
     const user = await User.findById(userId);
 
     if (!user) {
@@ -42,8 +42,6 @@ export const purchaseCourse = async (req, res) => {
     const userId = getAuth(req).userId;
     const userData = await User.findById(userId);
     const courseData = await Course.findById(courseId);
-    
- 
 
     if (!userData || !courseData) {
       return res.json({ success: false, message: 'Data Not Found' });
@@ -86,6 +84,11 @@ export const purchaseCourse = async (req, res) => {
       mode: 'payment',
       metadata: {
         purchaseId: newPurchase._id.toString(),
+      },
+      payment_intent_data: {
+        metadata: {
+          purchaseId: newPurchase._id.toString(),
+        },
       },
     });
 
