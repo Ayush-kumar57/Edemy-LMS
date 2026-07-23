@@ -32,7 +32,7 @@ const CourseDetails = () => {
   };
 
   useEffect(() => {
-    fetchCourseData()
+    fetchCourseData();
   }, [allCourses]);
 
   const toggleSection = (index) => {
@@ -236,7 +236,7 @@ const CourseDetails = () => {
               {isAlreadyEnrolled ? 'Already Enrolled' : 'Enroll Now '}
             </button>
             <div className="pt-6">
-              <p classNaem="md:text-xl text-lg font-medium text-gray-800">
+              <p className="md:text-xl text-lg font-medium text-gray-800">
                 What's in the course?
               </p>
               <ul className="ml-4 pt-2 text-sm md:text-default list-disc text-gray-500">
@@ -258,6 +258,3 @@ const CourseDetails = () => {
 };
 
 export default CourseDetails;
-
-
-
