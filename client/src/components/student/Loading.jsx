@@ -1,5 +1,21 @@
 import Footer from '../../components/student/Footer';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
 const Loading = () => {
+  const { path } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (path) {
+      const timer = setTimeout(() => {
+        navigate(`/${path}`);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   return (
     <>
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-cyan-50/50 to-white">
